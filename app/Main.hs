@@ -13,8 +13,7 @@ data GameState = GameState
 
 {-
 TODO:
-1. add random words
-2. if guesses is not valid english word, then run gameLoop with log
+1. if guesses is not valid english word, then continue
    - try to use http-service if word is valid english
 -}
 
@@ -35,17 +34,17 @@ gameLoop gameState
     guess <- getLine
     let result = is5LetterWord guess
     case result of
-      Just g' ->
-        let guessColored = assignColors rws g'
-            isMatch = g' == rws
-            allGreen = [map (\char -> (Green, char)) rws]
-            gs' = if isMatch then guessColored : allGreen else guessColored : gs
-         in do
-              putStrLn "Your guesses are: "
-              mapM_ (putStrLn . prettyPrint) $ reverse gs'
-              if isMatch
-                then putStrLn "You Win!"
-                else gameLoop $ gameState {guesses = gs'}
+      Just g' -> do
+        putStrLn "Your guesses are: "
+        mapM_ (putStrLn . prettyPrint) $ reverse gs'
+        if isMatch
+          then putStrLn "You Win!"
+          else gameLoop $ gameState {guesses = gs'}
+        where
+          guessColored = assignColors rws g'
+          isMatch = g' == rws
+          allGreen = [map (\char -> (Green, char)) rws]
+          gs' = if isMatch then guessColored : allGreen else guessColored : gs
       Nothing -> do
         print "Make sure the guess is 5 characters long"
         putStrLn "Your guesses are: "
