@@ -12,8 +12,8 @@ I start the initial version of this app using Typescript (the code is in `ts-ver
 But the Typescript version is not stable and no longer maintained.
 
 ### TODO:
-1. Refactor helper functions into `MyLib.hs`
-2. Currently the word is hardcoded to `hello`, should add feature to select any random 5 letters word.
-3. Check if guess submitted is a valid english word, plan to use http service for this feature
+- [ ] Refactor helper functions into `MyLib.hs`
+- [ ] Currently the word is hardcoded to `hello`, should add feature to select any random 5 letters word.
+- [ ] Check if guess submitted is a valid english word, plan to use http service for this feature
    - A good exercise to run http request in Haskell
 
