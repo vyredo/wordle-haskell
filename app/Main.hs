@@ -1,6 +1,7 @@
 module Main where
 
 import Data.List (elemIndices)
+import MyLib (getRandomWords)
 import System.Console.Pretty (Color (..), color)
 
 type Guess = [(Color, Char)]
@@ -22,16 +23,17 @@ main = do
   putStrLn (color Green " Green when letter is in correct position")
   putStrLn (color Blue " Blue when the letter of guess is incorrect position but is part of answer")
   putStrLn (color Black " Black when the letter of guess is not part of answer word")
-  gameLoop $ GameState {randomWords = "hello", guesses = []}
+  word <- getRandomWords
+  gameLoop $ GameState {randomWords = word, guesses = []}
 
 gameLoop :: GameState -> IO ()
 gameLoop gameState
-  | length gs >= 5 = putStrLn "GameOver"
+  | length gs >= 5 = putStrLn $ "GameOver" ++ "\n the answer is: " ++ rws
   | otherwise = do
     putStrLn ""
     putStrLn "Enter a guess:"
     guess <- getLine
-    let result = isGuessMoreThan5 guess
+    let result = is5LetterWord guess
     case result of
       Just g' ->
         let guessColored = assignColors rws g'
@@ -58,8 +60,8 @@ gameLoop gameState
 guessToString :: [(Color, Char)] -> String
 guessToString = map snd
 
-isGuessMoreThan5 :: String -> Maybe String
-isGuessMoreThan5 word
+is5LetterWord :: String -> Maybe String
+is5LetterWord word
   | length word == 5 = Just word
   | otherwise = Nothing
 
@@ -75,6 +77,6 @@ assignColors rw = go 0
     go :: Int -> [Char] -> Guess
     go _ [] = []
     go i (c : cs)
-      | rw !! i == c = (Magenta, c) : go (i + 1) cs
-      | c `elem` rw = (Yellow, c) : go (i + 1) cs
+      | rw !! i == c = (Green, c) : go (i + 1) cs
+      | c `elem` rw = (Blue, c) : go (i + 1) cs
       | otherwise = (Black, c) : go (i + 1) cs
