@@ -1,5 +1,7 @@
 # Revision history for text-game
 
-## 0.1.0.0 -- YYYY-mm-dd
+## 0.2.0.0 -- 2022-06-06
 
-* First version. Released on an unsuspecting world.
+* Second version. 
+  - Change the Guess Type definition from tuple to custom type
+  - To demonstrate an understanding of `class` in Haskell

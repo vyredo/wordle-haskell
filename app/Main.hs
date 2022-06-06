@@ -4,11 +4,29 @@ import Data.List (elemIndices)
 import MyLib (getRandomWords)
 import System.Console.Pretty (Color (..), color)
 
-type Guess = [(Color, Char)]
+{-
+  * Previously I used a List of Tuple which I think simplify the code
+    type Guess = [(Color, Char)]
+  * However, I decide to use value constructor instead of tuple to demonstrate understanding of typeclass
+-}
+
+data Guess = Guess
+  { getColor :: Color,
+    getCh :: Char
+  }
+
+class PrintGuess a where
+  prettyPrint :: [a] -> String
+
+instance PrintGuess Guess where
+  prettyPrint guess = foldr (\g acc -> printOne g ++ acc) "" guess
+    where
+      printOne :: Guess -> String
+      printOne g = color (getColor g) [(getCh g)]
 
 data GameState = GameState
   { randomWords :: String,
-    guesses :: [Guess]
+    guesses :: [[Guess]]
   }
 
 {-
@@ -43,7 +61,7 @@ gameLoop gameState
         where
           guessColored = assignColors rws g'
           isMatch = g' == rws
-          allGreen = [map (\char -> (Green, char)) rws]
+          allGreen = [map (\char -> Guess {getColor = Green, getCh = char}) rws]
           gs' = if isMatch then guessColored : allGreen else guessColored : gs
       Nothing -> do
         print "Make sure the guess is 5 characters long"
@@ -64,18 +82,12 @@ is5LetterWord word
   | length word == 5 = Just word
   | otherwise = Nothing
 
-prettyPrint :: Guess -> String
-prettyPrint = foldr (\g acc -> printOne g ++ acc) ""
-  where
-    printOne :: (Color, Char) -> String
-    printOne g = color (fst g) [(snd g)]
-
-assignColors :: [Char] -> [Char] -> Guess
+assignColors :: [Char] -> [Char] -> [Guess]
 assignColors rw = go 0
   where
-    go :: Int -> [Char] -> Guess
+    go :: Int -> [Char] -> [Guess]
     go _ [] = []
     go i (c : cs)
-      | rw !! i == c = (Green, c) : go (i + 1) cs
-      | c `elem` rw = (Blue, c) : go (i + 1) cs
-      | otherwise = (Black, c) : go (i + 1) cs
+      | rw !! i == c = Guess {getColor = Green, getCh = c} : go (i + 1) cs
+      | c `elem` rw = Guess {getColor = Blue, getCh = c} : go (i + 1) cs
+      | otherwise = Guess {getColor = Black, getCh = c} : go (i + 1) cs
