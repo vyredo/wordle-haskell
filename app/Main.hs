@@ -1,7 +1,7 @@
 module Main where
 
 import Data.List (elemIndices)
-import MyLib (getRandomWords)
+import MyLib (getRandomWords, isWordValid)
 import System.Console.Pretty (Color (..), color)
 
 {-
@@ -19,10 +19,10 @@ class PrintGuess a where
   prettyPrint :: [a] -> String
 
 instance PrintGuess Guess where
-  prettyPrint guess = foldr (\g acc -> printOne g ++ acc) "" guess
+  prettyPrint = foldr (\g acc -> printOne g ++ acc) ""
     where
       printOne :: Guess -> String
-      printOne g = color (getColor g) [(getCh g)]
+      printOne g = color (getColor g) [getCh g]
 
 data GameState = GameState
   { randomWords :: String,
@@ -50,9 +50,15 @@ gameLoop gameState
     putStrLn ""
     putStrLn "Enter a guess:"
     guess <- getLine
-    let result = is5LetterWord guess
+    result <- isWordValid guess
     case result of
-      Just g' -> do
+      Left err -> do
+        putStrLn $ color Red $ show err
+        putStrLn "\n"
+        putStrLn "Your guesses are: "
+        mapM_ (putStrLn . prettyPrint) gs
+        gameLoop gameState
+      Right g' -> do
         putStrLn "Your guesses are: "
         mapM_ (putStrLn . prettyPrint) $ reverse gs'
         if isMatch
@@ -63,11 +69,6 @@ gameLoop gameState
           isMatch = g' == rws
           allGreen = [map (\char -> Guess {getColor = Green, getCh = char}) rws]
           gs' = if isMatch then guessColored : allGreen else guessColored : gs
-      Nothing -> do
-        print "Make sure the guess is 5 characters long"
-        putStrLn "Your guesses are: "
-        mapM_ (putStrLn . prettyPrint) gs
-        gameLoop gameState
   where
     rws = randomWords gameState
     gs = guesses gameState
