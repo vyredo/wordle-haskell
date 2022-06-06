@@ -4,7 +4,6 @@ module MyLib (getRandomWords, isWordValid) where
 
 import Control.Exception (try)
 import qualified Data.ByteString.Char8 as BC
-import qualified Data.ByteString.Lazy.Char8 as L8
 import Network.HTTP.Client.Conduit
 import Network.HTTP.Conduit (simpleHttp)
 import Network.HTTP.Simple
@@ -86,9 +85,9 @@ getRandomWords = do
 data WordValidityError = WordNotFound | WordIsEmpty | WordIsNot5
 
 instance Show WordValidityError where
-  show WordNotFound = "Provide valid english word"
-  show WordIsEmpty = "Provide non empty word"
-  show WordIsNot5 = "Provide only 5 letter word"
+  show WordNotFound = "Error: Provide valid english word"
+  show WordIsEmpty = "Error: Provide non empty word"
+  show WordIsNot5 = "Error: Provide only 5 letter word"
 
 -- HTTP Request
 
@@ -104,9 +103,10 @@ isWordValid word
     queryEnglishWord :: String -> IO (Either WordValidityError String)
     queryEnglishWord word = do
       let request = httpLBS (generateUrl word)
-      eresponse <- try request
+      eresponse <- try request -- try will trigger ambiguous type error.. Either any ByteString
       case eresponse of
         Left e -> do
-          let error = e :: HttpException
+          -- 1 Line below is needed just to avoid ambiguous type error because of using `try`
+          let error = e :: HttpException -- is there a better way to avoid ambiguous type error?
           return $ Left WordNotFound
         Right _ -> return $ Right word
