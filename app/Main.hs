@@ -5,9 +5,9 @@ import MyLib (getRandomWords, isWordValid)
 import System.Console.Pretty (Color (..), color)
 
 {-
-  * Previously I used a List of Tuple which I think simplify the code
-    type Guess = [(Color, Char)]
-  * However, I decide to use value constructor instead of tuple to demonstrate understanding of typeclass
+  * Previously I used a List of Tuple which I think simplify the code like below
+        type Guess = [(Color, Char)]
+  * However, I decide to use Record instead of tuple to demonstrate understanding of typeclass
 -}
 
 data Guess = Guess
@@ -28,12 +28,6 @@ data GameState = GameState
   { randomWords :: String,
     guesses :: [[Guess]]
   }
-
-{-
-TODO:
-1. if guesses is not valid english word, then continue
-   - try to use http-service if word is valid english
--}
 
 main :: IO ()
 main = do

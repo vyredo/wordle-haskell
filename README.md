@@ -16,6 +16,6 @@ The Typescript version is not stable and no longer maintained.
 ## TODO:
 - [x] Currently the word is hardcoded to `hello`, should add feature to select any random 5 letters word.
 - [ ] refactor gameLoop function, to use Monad Transformer
-- [ ] Check if guess submitted is a valid english word, plan to use http service for this feature
+- [x] Check if guess submitted is a valid english word, plan to use http service for this feature
    - A good exercise to run http request in Haskell
 
