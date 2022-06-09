@@ -1,28 +1,16 @@
 module Main where
 
 import Data.List (elemIndices)
-import MyLib (getRandomWords, isWordValid)
+import GameStateLib (Guess (..), assignColors, is5LetterWord, prettyPrint)
+import RequestLib (isWordValid)
 import System.Console.Pretty (Color (..), color)
+import WordLib (getRandomWords)
 
 {-
   * Previously I used a List of Tuple which I think simplify the code like below
         type Guess = [(Color, Char)]
   * However, I decide to use Record instead of tuple to demonstrate understanding of typeclass
 -}
-
-data Guess = Guess
-  { getColor :: Color,
-    getCh :: Char
-  }
-
-class PrintGuess a where
-  prettyPrint :: [a] -> String
-
-instance PrintGuess Guess where
-  prettyPrint = foldr (\g acc -> printOne g ++ acc) ""
-    where
-      printOne :: Guess -> String
-      printOne g = color (getColor g) [getCh g]
 
 data GameState = GameState
   { randomWords :: String,
@@ -66,23 +54,3 @@ gameLoop gameState
   where
     rws = randomWords gameState
     gs = guesses gameState
-
--- Helper --
-
-guessToString :: [(Color, Char)] -> String
-guessToString = map snd
-
-is5LetterWord :: String -> Maybe String
-is5LetterWord word
-  | length word == 5 = Just word
-  | otherwise = Nothing
-
-assignColors :: [Char] -> [Char] -> [Guess]
-assignColors rw = go 0
-  where
-    go :: Int -> [Char] -> [Guess]
-    go _ [] = []
-    go i (c : cs)
-      | rw !! i == c = Guess {getColor = Green, getCh = c} : go (i + 1) cs
-      | c `elem` rw = Guess {getColor = Blue, getCh = c} : go (i + 1) cs
-      | otherwise = Guess {getColor = Black, getCh = c} : go (i + 1) cs
