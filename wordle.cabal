@@ -26,7 +26,7 @@ version:            0.1.0.0
 extra-source-files: CHANGELOG.md
 
 library
-    exposed-modules:  WordLib, GameStateLib, RequestLib
+    exposed-modules:  WordLib, GuessLib, GameStateLib,  RequestLib
 
     -- Modules included in this library but not exported.
     -- other-modules:

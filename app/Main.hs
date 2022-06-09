@@ -1,16 +1,11 @@
 module Main where
 
 import Data.List (elemIndices)
-import GameStateLib (Guess (..), assignColors, is5LetterWord, prettyPrint)
+import GameStateLib (assignColors, is5LetterWord)
+import GuessLib (Guess (..), prettyPrint)
 import RequestLib (isWordValid)
 import System.Console.Pretty (Color (..), color)
 import WordLib (getRandomWords)
-
-{-
-  * Previously I used a List of Tuple which I think simplify the code like below
-        type Guess = [(Color, Char)]
-  * However, I decide to use Record instead of tuple to demonstrate understanding of typeclass
--}
 
 data GameState = GameState
   { randomWords :: String,

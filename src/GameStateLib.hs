@@ -1,20 +1,7 @@
-module GameStateLib (Guess (..), prettyPrint, guessToString, is5LetterWord, assignColors) where
+module GameStateLib (Guess (..), guessToString, is5LetterWord, assignColors) where
 
+import GuessLib (Guess (..))
 import System.Console.Pretty (Color (..), color)
-
-data Guess = Guess
-  { getColor :: Color,
-    getCh :: Char
-  }
-
-class PrintGuess a where
-  prettyPrint :: [a] -> String
-
-instance PrintGuess Guess where
-  prettyPrint = foldr (\g acc -> printOne g ++ acc) ""
-    where
-      printOne :: Guess -> String
-      printOne g = color (getColor g) [getCh g]
 
 -- Helper --
 
