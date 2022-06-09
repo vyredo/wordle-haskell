@@ -1,7 +1,7 @@
 # WORDLE in Haskell
 
 ## How to run
--  Run Main.hs
+-  clone this project and run `cabal run`
 -  In current version the answer is hardcoded to `hello`
 -  There are 3 Color Scheme:
    - <span style='color:"green";'>Green</span> if the letter of guess is in correct position 
