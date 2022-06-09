@@ -71,6 +71,6 @@ wordsLength = length randomWords - 1
 getRandomWords :: IO String
 getRandomWords = do
   n <- rollDice
-  return $ randomWords !! n
+  pure $ randomWords !! n
   where
     rollDice = randomRIO (0, wordsLength) :: IO Int

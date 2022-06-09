@@ -22,8 +22,8 @@ generateUrl word = parseRequestThrow_ $ "https://api.wordnik.com/v4/word.json/" 
 
 isWordValid :: String -> IO (Either WordValidityError String)
 isWordValid word
-  | word == "" = return $ Left WordIsEmpty
-  | length word /= 5 = return $ Left WordIsNot5
+  | word == "" = pure $ Left WordIsEmpty
+  | length word /= 5 = pure $ Left WordIsNot5
   | otherwise = queryEnglishWord word
   where
     queryEnglishWord :: String -> IO (Either WordValidityError String)
@@ -34,5 +34,5 @@ isWordValid word
         Left e -> do
           -- 1 Line below is needed just to avoid ambiguous type error because of using `try`
           let error = e :: HttpException -- is there a better way to avoid ambiguous type error?
-          return $ Left WordNotFound
-        Right _ -> return $ Right word
+          pure $ Left WordNotFound
+        Right _ -> pure $ Right word
