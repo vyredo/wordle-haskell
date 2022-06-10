@@ -1,7 +1,7 @@
 module GameStateLib (Guess (..), guessToString, is5LetterWord, assignColors) where
 
 import GuessLib (Guess (..))
-import System.Console.Pretty (Color (..), color)
+import System.Console.Pretty (Color (Black, Blue, Green), color)
 
 -- Helper --
 

@@ -4,7 +4,7 @@ import Data.List (elemIndices)
 import GameStateLib (assignColors, is5LetterWord)
 import GuessLib (Guess (..), prettyPrint)
 import RequestLib (isWordValid)
-import System.Console.Pretty (Color (..), color)
+import System.Console.Pretty (Color (Black, Blue, Green), color)
 import WordLib (getRandomWords)
 
 data GameState = GameState
@@ -22,7 +22,7 @@ main = do
 
 gameLoop :: GameState -> IO ()
 gameLoop gameState
-  | length gs >= 5 = putStrLn $ "GameOver" ++ "\n the answer is: " ++ rws
+  | length gs >= 5 = putStrLn $ concat ["GameOver", "\n the answer is: ", rws]
   | otherwise = do
     putStrLn ""
     putStrLn "Enter a guess:"

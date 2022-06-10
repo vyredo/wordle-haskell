@@ -1,6 +1,6 @@
 module GuessLib (Guess (..), prettyPrint) where
 
-import System.Console.Pretty (Color (..), color)
+import System.Console.Pretty (Color, color)
 
 {-
   * Previously I used a List of Tuple which I think simplify the code like below
