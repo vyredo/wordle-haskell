@@ -2,7 +2,6 @@
 
 ## How to run
 -  clone this project and run `cabal run`
--  In current version the answer is hardcoded to `hello`
 -  There are 3 Color Scheme:
    - <span style='color:"green";'>Green</span> if the letter of guess is in correct position 
    - Blue if the letter of guess is incorrect position but is part of answer
