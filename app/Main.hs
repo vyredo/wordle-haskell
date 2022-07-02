@@ -4,7 +4,7 @@ import Data.List (elemIndices)
 import GameStateLib (assignColors, is5LetterWord)
 import GuessLib (Guess (..), prettyPrint)
 import RequestLib (isWordValid)
-import System.Console.Pretty (Color (Black, Blue, Green), color)
+import System.Console.Pretty (Color (Black, Blue, Green, Red), color)
 import WordLib (getRandomWords)
 
 data GameState = GameState
