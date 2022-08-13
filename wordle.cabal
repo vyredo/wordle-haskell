@@ -46,13 +46,14 @@ executable wordle
     main-is:          Main.hs
 
     -- Modules included in this executable, other than Main.
-    -- other-modules:
-
+    -- other-modules:    WordLib, GuessLib, GameStateLib,  RequestLib
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
     build-depends:
-        mtl,
         base ^>=4.14.3.0,
+        mtl,
+        http-conduit ^>=2.3.8,
+        bytestring,
         random ^>=1.2.1.1,
         pretty-terminal ^>=0.1.0.0,
         wordle
