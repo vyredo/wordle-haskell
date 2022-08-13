@@ -1,4 +1,4 @@
-module RequestLib (isWordValid) where
+module RequestLib (isWordValid, WordValidityError) where
 
 import Control.Exception (try)
 import qualified Data.ByteString.Char8 as BC
