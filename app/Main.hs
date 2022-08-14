@@ -42,7 +42,7 @@ main =
 loop :: GameState -> IO ()
 loop gs = do
   if gameOver gs || win gs
-    then logState gs
+    then pure ()
     else do
       safeInput <- runExceptT getInput
       let (_, s) = runState stateLogic gs {userInput = safeInput}
@@ -81,13 +81,20 @@ checkGuessAndAssignColor guess answer =
 
 printGuesses :: GameState -> IO ()
 printGuesses gs = do
+  putStrLn "Your guesses:"
   mapM_ (putStrLn . prettyPrint) $ guesses gs
 
 logState :: GameState -> IO ()
-logState s
-  | getError s /= [] = do
-    putStrLn $ color Red $ show $ getError s
-  | gameOver s = putStrLn "Game Over"
-  | win s = putStrLn $ "You Win, the answer is " ++ answer s
-  | otherwise = do
-    printGuesses s
+logState s = do
+  putStrLn ""
+  log s
+  where
+    log s
+      | getError s /= [] = do
+        putStrLn $ color Red $ show $ getError s
+      | gameOver s = do
+        putStrLn "Game Over"
+        putStrLn $ color Green $ "The answer was: " ++ answer s
+      | win s = putStrLn $ "You Win, the answer is " ++ answer s
+      | otherwise = do
+        printGuesses s

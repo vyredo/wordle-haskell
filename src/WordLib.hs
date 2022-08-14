@@ -2,8 +2,12 @@
 
 module WordLib (getRandomWords) where
 
+import Data.List
+import qualified Data.Map as Map
+import qualified Data.Maybe
 import System.Random
 
+randomWords :: [String]
 randomWords =
   [ "hello",
     "world",
@@ -66,11 +70,17 @@ randomWords =
   ]
 
 wordsLength :: Int
-wordsLength = length randomWords - 1
+wordsLength = Prelude.length randomWords - 1
+
+wordDic :: Map.Map Int String
+wordDic = Map.fromList enumList
+  where
+    enumList = zip [0 ..] randomWords
 
 getRandomWords :: IO String
 getRandomWords = do
   n <- rollDice
-  pure $ randomWords !! n
+  let word = Map.lookup n wordDic
+  pure $ Data.Maybe.fromMaybe "" word
   where
     rollDice = randomRIO (0, wordsLength) :: IO Int
