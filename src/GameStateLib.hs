@@ -14,11 +14,11 @@ is5LetterWord word
   | otherwise = Nothing
 
 assignColors :: [Char] -> [Char] -> [Guess]
-assignColors rw = go 0
+assignColors answer = go 0
   where
     go :: Int -> [Char] -> [Guess]
     go _ [] = []
     go i (c : cs)
-      | rw !! i == c = Guess {getColor = Green, getCh = c} : go (i + 1) cs
-      | c `elem` rw = Guess {getColor = Blue, getCh = c} : go (i + 1) cs
+      | answer !! i == c = Guess {getColor = Green, getCh = c} : go (i + 1) cs
+      | c `elem` answer = Guess {getColor = Blue, getCh = c} : go (i + 1) cs
       | otherwise = Guess {getColor = Black, getCh = c} : go (i + 1) cs

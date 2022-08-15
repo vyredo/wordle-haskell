@@ -49,7 +49,7 @@ main =
     putStrLn (color Green " Green when letter is in correct position")
     putStrLn (color Blue " Blue when the letter of guess is incorrect position but is part of answer")
     putStrLn (color Black " Black when the letter of guess is not part of answer word")
-    word <- getRandomWords -- use Map and big list of random words
+    word <- getRandomWords
     void $ runStateT loop gs {answer = word}
 
 loop :: (MonadState GameState m, MonadIO m) => m ()
@@ -71,7 +71,6 @@ getInput = do
   line <- liftIO $ getLine >>= isWordValid
   case line of
     Left err -> do
-      -- liftIO $ putStrLn $ "what is line" ++ show err
       throwError err
     Right word -> pure word
 
