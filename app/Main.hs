@@ -58,21 +58,22 @@ loop = do
   if gameOver state || win state
     then pure ()
     else do
-      safeInput <- runExceptT getInput
-      modify (\gs -> gs {userInput = safeInput})
+      runExceptT getInput
       stateLogic
       logState
       loop
 
-getInput :: (MonadError WordValidityError m, MonadIO m) => m String
+getInput :: (MonadState GameState m, MonadError WordValidityError m, MonadIO m) => m ()
 getInput = do
   liftIO $ putStrLn ""
   liftIO $ putStrLn "Enter a guess:"
   line <- liftIO $ getLine >>= isWordValid
-  case line of
-    Left err -> do
-      throwError err
-    Right word -> pure word
+  let safeInput = do
+        case line of
+          Left err -> do
+            throwError err
+          Right word -> pure word
+  modify (\gs -> gs {userInput = safeInput})
 
 stateLogic :: (MonadState GameState m, MonadIO m) => m ()
 stateLogic = do
