@@ -3,14 +3,19 @@
 module Main where
 
 import Control.Monad.Except (ExceptT, MonadError, runExceptT, throwError)
+import Control.Monad.Identity
 import Control.Monad.State
   ( MonadIO (..),
     MonadState (get, put),
+    StateT (runStateT),
+    evalState,
+    execState,
     modify,
     runState,
   )
 import Data.List (elemIndices)
-import GameStateLib (assignColors, is5LetterWord)
+import GHC.IO (unsafePerformIO)
+import GameStateLib (Guess, assignColors, is5LetterWord)
 import GuessLib (Guess (..), prettyPrint)
 import RequestLib (WordValidityError, isWordValid)
 import System.Console.Pretty (Color (Black, Blue, Green, Red), color)
@@ -45,16 +50,16 @@ main =
     putStrLn (color Blue " Blue when the letter of guess is incorrect position but is part of answer")
     putStrLn (color Black " Black when the letter of guess is not part of answer word")
     word <- getRandomWords -- use Map and big list of random words
-    let (_, s) = runState loop gs {answer = word}
-    pure ()
+    void $ runStateT loop gs {answer = word}
 
 loop :: (MonadState GameState m, MonadIO m) => m ()
 loop = do
-  if gameOver gs || win gs
+  state <- get
+  if gameOver state || win state
     then pure ()
     else do
       safeInput <- runExceptT getInput
-      put $ gs {userInput = safeInput}
+      modify (\gs -> gs {userInput = safeInput})
       stateLogic
       logState
       loop
@@ -73,7 +78,7 @@ getInput = do
 stateLogic :: (MonadState GameState m, MonadIO m) => m ()
 stateLogic = do
   state <- get
-  put (state {getError = ""})
+  modify (\gs -> gs {getError = ""})
   case userInput state of
     Left err -> do
       modify (\gs -> gs {getError = show err})
