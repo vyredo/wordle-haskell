@@ -1,5 +1,3 @@
-{-# LANGUAGE FlexibleContexts #-}
-
 module Main where
 
 import Control.Monad.Except (ExceptT, MonadError, runExceptT, throwError)
@@ -20,6 +18,7 @@ import GuessLib (Guess (..), prettyPrint)
 import RequestLib (WordValidityError, isWordValid)
 import System.Console.Pretty (Color (Black, Blue, Green, Red), color)
 import WordLib (getRandomWords)
+import Prelude
 
 data GameState = GameState
   { maxAttempt :: Int,
@@ -52,7 +51,9 @@ main =
     word <- getRandomWords
     void $ runStateT loop gs {answer = word}
 
-loop :: (MonadState GameState m, MonadIO m) => m ()
+type GState m = (MonadState GameState m, MonadIO m)
+
+loop :: GState m => m ()
 loop = do
   state <- get
   if gameOver state || win state
@@ -75,7 +76,7 @@ getInput = do
           Right word -> pure word
   modify (\gs -> gs {userInput = safeInput})
 
-stateLogic :: (MonadState GameState m, MonadIO m) => m ()
+stateLogic :: GState m => m ()
 stateLogic = do
   state <- get
   modify (\gs -> gs {getError = ""})
@@ -94,7 +95,7 @@ stateLogic = do
         then map (\char -> Guess {getColor = Green, getCh = char}) answer
         else assignColors answer guess
 
-logState :: (MonadState GameState m, MonadIO m) => m ()
+logState :: GState m => m ()
 logState = do
   liftIO $ putStrLn ""
   s <- get

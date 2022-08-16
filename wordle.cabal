@@ -50,6 +50,12 @@ executable wordle
     -- other-modules:    WordLib, GuessLib, GameStateLib,  RequestLib
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
+    default-extensions:
+        OverloadedStrings,
+        QuasiQuotes,
+        TemplateHaskell,
+        ConstraintKinds,
+        FlexibleContexts
     build-depends:
         base ^>=4.14.3.0,
         mtl,
